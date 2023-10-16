@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>作业提交记录</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+        <style>
+            a {
+                color: #ffffff; /* 设置默认链接颜色 */
+                text-decoration: none; /* 去掉下划线 */
+            }
+
+            /* 悬停时的链接样式 */
+            a:hover {
+                color: rgb(107, 105, 105); /* 设置悬停时链接颜色为蓝色 */
+            }
+        </style>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+                
+                <article id="intro">
+                    <span style="float: left;"><h2 class="major">作业提交记录</h2></span>
+                    <span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
+                    <br><br>
+                    <span class="image main"><img src="/images/pic01.jpg" alt="" /></span>
+                   
+                    <h3 style="text-align: center;">作业标题 :{{title[0]}}</h3>
+					<h4>作业内容 :{{title[1]}}</h4>
+                    <br><br>
+                    <h3>作业列表</h3>
+
+                    <div class="container">
+
+                        <table>
+                            <thead>
+                                <tr>	
+                                    <th>序号</th>
+                                    <th>学生姓名</th>
+                                    <th>学号</th>
+                                    <th>作业详情</th>
+                                    <th>互评成绩</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {% for homework in homeworks %}
+                                    <tr style="height: 60px;">
+                                        <td>{{loop.index}}</td>
+                                        <td>{{homework[0]}}</td>
+                                        <td>{{homework[1]}}</td>
+                                        {% if homework[2] != none %}
+                                            <td><a href="/checkOneHomework/{{homework[1]}}/{{hid}}">已提交</a></td>
+                                        {% else %}
+                                            <td>未提交</td>
+                                        {% endif %}
+                                        <td>/</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </article>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>
+

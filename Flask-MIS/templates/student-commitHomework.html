@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>提交作业</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+
+		<style>
+			.text-box {
+				border: 2px solid #333; /* 边框样式 */
+				border-radius: 10px; /* 圆角边框 */
+				padding: 20px; /* 内边距 */
+				background-color: #5e5e5e; /* 背景颜色 */
+				width: 400px; /* 框的宽度 */
+				text-align: center; /* 文本居中 */
+				margin: 0 auto; /* 水平居中 */
+			}
+
+        	.commit-box {
+            	width: 100%;
+            	padding: 10px;
+            	border: 2px solid #959191;
+            	border-radius: 15px;
+            	font-size: 16px;
+            	margin: 10px 0;
+        	}
+
+			
+		</style>
+	</head>
+	<body>
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<article id="contact" style="margin:auto">
+					<h2 class="major">作业提交</h2>
+					<br><br>
+					<h3 style="text-align: center;">作业标题: {{homework[0]}}</h3>
+					<br>
+					<h4 style="text-align: center;">作业内容</h4>
+					<div class="text-box">
+						<p>{{homework[1]}}</p>
+					</div>
+
+					<br><br>
+
+					<form method="post" action="/commitHomeworks/{{hid}}/{{cno}}">
+						<div class="container">
+							<h3>提交内容</h3>
+								<textarea class="commit-box" name="content" rows="4" cols="100" placeholder="在这里输入提交内容"></textarea>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="提交" class="primary" /></li>
+							<li><a href="/cancelCommitHomeworks/{{cno}}"><input type="button" value="取消" /></a></li>
+						</ul>
+						
+					</form>
+				</article>	
+			</div>
+	</body>
+</html>

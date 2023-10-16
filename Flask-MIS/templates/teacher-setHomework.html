@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>布置作业</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body>
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<article id="contact" style="margin:auto">
+					<h2 class="major">作业布置</h2>
+					<form method="post" action="/setHomework">
+						<div class="fields">
+							<div class="field half">
+								
+									<label for="title">作业标题</label>
+									<input type="text" name="title" id="title" placeholder="请输入作业标题"/>
+								
+							</div>
+						</div>
+
+						<div class="fields">
+							<div class="field half">
+
+								<label for="deadline">截至时间</label>
+								<input type="text" name="deadline" id="deadline" placeholder="请输入作业截至时间"/>
+
+							</div>
+						</div>
+						
+						<div class="fields">
+							<div class="field half">
+
+								<label for="score">作业总分(满分)</label>
+								<input type="text" name="score" id="score" placeholder="请输入作业总分"/>
+
+							</div>
+						</div>
+						
+						<div class="fields">
+							<div class="field half">
+								
+									<label for="content">作业内容</label>
+									<textarea id="content" name="content" rows="4" cols="200" placeholder="请输入作业内容"></textarea>
+								
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="提交" class="primary" /></li>
+							<li><a href="/cancelSetHomeworks"><input type="button" value="取消" /></a></li>
+						</ul>
+						
+					</form>
+				</article>	
+			</div>
+	</body>
+</html>

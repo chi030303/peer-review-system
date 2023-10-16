@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>作业详情</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+
+		<style>
+			.text-box {
+				border: 2px solid #333; /* 边框样式 */
+				border-radius: 10px; /* 圆角边框 */
+				padding: 20px; /* 内边距 */
+				background-color: #4949496c; /* 背景颜色 */
+				height: 400px;
+				width: 700px; /* 框的宽度 */
+				margin: 0 auto; /* 水平居中 */
+				color:rgb(163, 160, 160);
+            	font-size:16px;
+			}	
+		</style>
+	</head>
+	<body>
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<article id="contact" style="margin:auto">
+					<span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
+					<h2 class="major">作业详情</h2>
+					<span style="float: right;"><h3>提交时间 :{{homework[2]}}</h3></span>
+					<span style="float: left;"><h3>学号 :{{homework[0]}}&emsp;&emsp;</h3></span>
+					<h3>姓名 :{{homework[1]}}</h3>
+					
+					<br><br>
+					<h3 style="text-align: center;">提交内容</h3>
+					<div class="text-box">
+						<p>{{homework[3]}}</p>
+					</div>
+
+					<br><br>
+
+					<!-- <form method="post" action="/commitHomeworks/{{hid}}/{{cno}}">
+						<div class="container">
+							<h3>提交内容</h3>
+								<textarea class="commit-box" name="content" rows="4" cols="100" placeholder="在这里输入提交内容"></textarea>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="提交" class="primary" /></li>
+							<li><a href="/cancelCommitHomeworks/{{cno}}"><input type="button" value="取消" /></a></li>
+						</ul>
+						
+					</form> -->
+				</article>	
+			</div>
+	</body>
+</html>

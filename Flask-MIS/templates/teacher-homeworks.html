@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>课程作业</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+        <style>
+            a {
+                color: #ffffff; /* 设置默认链接颜色 */
+                text-decoration: none; /* 去掉下划线 */
+            }
+
+            /* 悬停时的链接样式 */
+            a:hover {
+                color: rgb(120, 120, 120); /* 设置悬停时链接颜色为蓝色 */
+            }
+        </style>
+        
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+                <article id="intro">
+                    <span style="float: left;"><h2 class="major">课程作业</h2></span>
+                    <span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
+                    <br><br>
+                    
+                    <span class="image main"><img src="/images/pic01.jpg" alt="" /></span>
+
+                    <br><br>
+                    <!-- <h3>作业列表</h3> -->
+                    <span style="float: left;"><h3>作业列表</h3></span>
+                    <span style="float: right;"><a href="/show"><img src="/images/add.png" height="25" width="25">添加作业</a></span>
+                    <br><br>
+
+                    <div class="container">
+                        <table>
+                            <thead>
+                                <tr>	
+                                    <th>作业标题</th>
+                                    <th>作业截至时间</th>
+                                    <th>总分</th>
+                                    <th>查看提交详情</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {% for homework in homeworks %}
+                                    <tr style="height: 60px;">
+                                        <td>{{homework[0]}}</td>
+                                        <td>{{homework[1]}}</td>
+                                        <td>{{homework[2]}}</td>
+                                        <td><a href="/checkStudentHomeworks/{{homework[3]}}"><button type="button" style="height: 40px;">查看</button></a></td>
+                                        {% if homework[1] >= now_time %}
+                                            <td>未截止</td>
+                                        {% else %}
+                                            <td>已结束</td>
+                                        {% endif %}
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </article>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>

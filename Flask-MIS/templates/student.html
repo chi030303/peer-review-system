@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>学生中心</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<!-- <span class="icon fa-gem"></span> -->
+							<img src="images/profile.png" height="87" width="87" style="position:relative;top:px;"/>
+						</div>
+						
+						<div class="content">
+							<div class="inner">
+								<h1>学生中心</h1>
+								<div id="current-time">{{user[1]}},</div>
+								<p>欢迎来到KaLaBiQiu学生系统</p>
+								<p>部门: {{user[3]}}</p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#inform">个人信息</a></li>
+								<li><a href="/sCourses">课程平台</a></li>
+								<li><a href="#about">互评申诉</a></li>
+								<!-- <li><a href="#contact">Contact</a></li> -->
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+							<article id="inform">
+								<h2 class="major">个人信息</h2>
+								<span class="image main"><img src="images/pic01.jpg" alt="" /></span>
+								<table>
+									<tbody>
+										<tr><td>学号</td><td>{{user[0]}}</td></tr>
+										<tr><td>姓名</td><td>{{user[1]}}</td></tr>
+										<tr><td>性别</td><td>{{user[2]}}</td></tr>
+										<tr><td>专业学院</td><td>{{user[3]}}</td></tr>
+										<tr><td>出生日期</td><td>{{user[4]}}</td></tr>
+										<tr><td>班级</td><td>{{user[5]}}</td></tr>
+									</tbody>
+								  </table>
+							</article>
+
+						<!-- Work -->
+							<article id="work">
+								<h2 class="major">Work</h2>
+								<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
+								<p>Adipiscing magna sed dolor elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices.</p>
+								<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet feugiat tempus.</p>
+							</article>
+
+						<!-- About -->
+							<article id="about">
+								<h2 class="major">About</h2>
+								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
+								<p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p>
+							</article>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+			<script>
+				function get_time(){
+					var date = new Date();
+					time = date.getHours(); 
+					return time;
+				}
+
+				function show_time(){
+					var current_time = document.getElementById("current-time");
+					var time = get_time();
+					if(time>=1 && time<5){
+						current_time.innerHTML = "凌晨了,时间不早了,请尽早休息";
+					} 
+					else if(time>=5 && time<8){
+						current_time.innerHTML += "早上好";
+					}
+					else if(time>=8 && time<11){
+						current_time.innerHTML += "上午好";
+					}
+					else if(time>=11 && time<13){
+						current_time.innerHTML += "中午好";
+					}
+					else if(time>=13 && time<17){
+						current_time.innerHTML += "下午好";
+					}
+					else if(time>=17){
+						current_time.innerHTML += "晚上好";
+					}
+				}
+
+				window.onload = function(){
+					show_time();
+				};
+			</script>
+
+	</body>
+</html>

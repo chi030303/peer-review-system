@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>课程平台</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+        <style>
+            .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 创建3列，每列等宽 */
+            gap: 10px; /* 列之间的间距 */
+            }
+
+            .item {
+                border: 1px solid #bababa;
+                padding: 10px;
+                text-align: center;
+            }
+
+            a {
+                color: #ffffff; /* 设置默认链接颜色 */
+                text-decoration: none; /* 去掉下划线 */
+            }
+
+            /* 悬停时的链接样式 */
+            a:hover {
+                color: rgb(120, 120, 120); /* 设置悬停时链接颜色为蓝色 */
+            }
+        </style>
+
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+                <article id="intro">
+                    <span style="float: left;"><h2 class="major">课程平台</h2></span>
+                    <span style="float: right;"><a href="/redirect"><img src="images/back.png" height="35" width="35"></a></span>
+                    <br><br>
+                    
+                    <span class="image main"><img src="images/pic01.jpg" alt="" /></span>
+
+                    <h3>课程列表</h3>
+
+                    <div class="container">
+                        {% set num = 7 %}
+                        {% for course in courses %}
+                            <div class="item"><img src="images/course{{loop.index%num}}.png" height="100" width="100"/><div><a href="/sHomeworks/{{course[3]}}/{{course[2]}}">{{course[0]}}</a></div><div>课堂号: {{course[1]}}</div><div>任课教师: {{course[2]}}</div></div>
+                        {% endfor %}
+                        
+                    </div>
+
+
+
+                </article>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
