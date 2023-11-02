@@ -3,6 +3,7 @@ from datetime import timedelta
 import os
 import pymysql
 from datetime import datetime
+from tools import distribute_assess
 
 app = Flask(__name__,static_url_path='', static_folder='templates', template_folder='templates')
 
@@ -97,7 +98,6 @@ def selctStudentHomeworks(cno,tname):
 
     cursor.execute(sql_1%param)
     homeworks = cursor.fetchall()
-    print(homeworks)
     return render_template('student-homeworks.html',homeworks=homeworks,tname=tname,now_time=now_time)
 
 
@@ -140,6 +140,10 @@ def commitHomeworks(hid,cno):
         cursor.execute(sql_1%param)
         db.commit()
 
+        # 学生提交作业后实现互评工作的分配
+        if ~distribute_assess(db,sno,cno,hid):
+            print('Error')
+
         cursor.execute(sql_2)
         tname =cursor.fetchone()[0]
         return redirect('/sHomeworks/'+cno+'/'+tname)
@@ -162,6 +166,72 @@ def cancelCommitHomeworks(cno):
     tname =cursor.fetchone()[0]
     return redirect('/sHomeworks/'+cno+'/'+tname)
 
+
+# 学生查看互评作业列表
+@app.route('/assess',methods=['GET','POST'])
+def selctAssessList():
+
+    user = session.get("user")
+    sno = user[0]
+    cursor = db.cursor()
+
+    # 查询互评作业列表
+    sql = "select course.cname,course.cno,homework.title,assess.sno_a,assess.score,assess.hid from assess,homework,course where assess.cno = homework.cno and assess.hid = homework.hid and homework.cno = course.cno and assess.sno = '%s'"
+    param = (sno)
+
+    cursor.execute(sql%param)
+    assessList = cursor.fetchall()
+    return render_template('student-assessList.html',assessList=assessList)
+
+
+# 学生互评其他学生作业
+@app.route('/assessHomework/<sno_a>/<hid>/<cno>',methods=['GET','POST'])
+def assessHomework(sno_a,hid,cno):
+
+    user = session.get("user")
+    sno = user[0]
+    cursor = db.cursor()
+
+    # 将hid放入session中
+    session['inform'] = (hid,cno,sno_a)
+    session.permanent = True
+
+    # 查询互评学生的作业详情
+    sql = "select homework.title,assess.sno_a,homeworkcommit.content,homework.score from homework,homeworkcommit,assess where homework.hid = homeworkcommit.hid and homework.cno = homeworkcommit.cno and assess.cno = homework.cno and assess.hid = homework.hid and homeworkcommit.sno = assess.sno_a and assess.sno = '%s' and assess.sno_a = '%s' and assess.hid = %s and assess.cno = '%s'"
+    param = (sno,sno_a,hid,cno)
+
+    cursor.execute(sql%param)
+    homework = cursor.fetchone()
+    return render_template('student-assessHomework.html',homework=homework)
+
+
+# 学生提交作业互评结果
+@app.route('/commitAssess',methods=['GET','POST'])
+def commitAssess():
+
+    user = session.get("user")
+    sno = user[0]
+
+    inform = session.get("inform")
+
+    # 获取提交结果
+    score = str(request.form.get('score'))
+    assess = str(request.form.get('assess'))
+
+    cursor = db.cursor()
+
+    # 提交作业互评成绩和评价
+    sql = "update assess set score = %s , assess = '%s' where sno = '%s' and hid = %s and cno = '%s' and sno_a = '%s'"
+    param = (score,assess,sno,inform[0],inform[1],inform[2])
+
+    print(sql%param)
+    cursor.execute(sql%param)
+    db.commit()
+
+    return redirect('/assess')
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 # 教师查看教授课程
@@ -358,4 +428,8 @@ def reDirect():
 
 
 if __name__ == '__main__':
+    # app.run(host='0.0.0.0',port=9000,debug=True)
     app.run(debug=True)
+ 
+
+

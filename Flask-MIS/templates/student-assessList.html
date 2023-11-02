@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>课程作业</title>
+		<title>作业互评</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css" />
@@ -13,44 +13,41 @@
 		<!-- Wrapper -->
 			<div id="wrapper">
                 <article id="intro">
-                    <span style="float: left;"><h2 class="major">课程作业</h2></span>
+                    <span style="float: left;"><h2 class="major">作业互评</h2></span>
                     <span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
                     <br><br>
                     
                     <span class="image main"><img src="/images/pic01.jpg" alt="" /></span>
 
-                    <h3>作业列表</h3>
+                    <h3>我的作业互评列表</h3>
 
                     <div class="container">
 
                         <table>
                             <thead>
                                 <tr>	
+                                    <th>课程名称</th>
+                                    <th>课程编号</th>
                                     <th>作业标题</th>
-                                    <th>发布人</th>
-                                    <th>提交截至时间</th>
-                                    <th>提交作业</th>
-                                    <th>总分</th>
-                                    <th>我的成绩</th>
-                                    <th>互评详情</th>
+                                    <th>互评学号</th>
+                                    <th>互评</th>
+                                    <th>互评成绩</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                    {% for homework in homeworks %}
+                                    {% for assess in assessList %}
                                     <tr style="height: 60px;">
-                                        <td>{{homework[0]}}</td>
-                                        <td>{{tname}}</td>
-                                        <td>{{homework[1]}}</td>
-                                        {% if homework[1] >= now_time and homework[5] == none %}
-                                            <td><a href="/showHomeworks/{{homework[3]}}/{{homework[4]}}"><button type="button" style="height: 40px;">提交</button></a></td>
-                                        {% elif homework[5] != none %}
-                                            <td>已提交</button></td>
-                                        {% else %}
-                                            <td>未提交</button></td>
-                                        {% endif %}
-                                        <td>{{homework[2]}}</td>
+                                        <td>{{assess[0]}}</td>
+                                        <td>{{assess[1]}}</td>
+                                        <td>{{assess[2]}}</td>
+                                        <td>{{assess[3]}}</td>
+                                        {% if assess[4] == none %}
+                                        <td><a href="/assessHomework/{{assess[3]}}/{{assess[5]}}/{{assess[1]}}"><button type="button" style="height: 40px;">互评</button></a></td>
                                         <td>/</td>
-                                        <td><a href="/"><button type="button" style="height: 40px;">查看</button></a></td>
+                                        {% else %}
+                                        <td>已互评</td>
+                                        <td>{{assess[4]}}</td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 </tr>

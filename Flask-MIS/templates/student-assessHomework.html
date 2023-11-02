@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>作业互评</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+
+		<style>
+			.text-box {
+				border: 2px solid #a4a4a4; /* 边框样式 */
+				border-radius: 10px; /* 圆角边框 */
+				padding: 20px; /* 内边距 */
+				background-color: #4e4e4e; /* 背景颜色 */
+				width: 600px; /* 框的宽度 */
+				text-align: left; /* 文本居中 */
+				margin: 0 auto; /* 水平居中 */
+			}
+
+        	.commit-box {
+            	width: 100%;
+            	padding: 10px;
+            	border: 2px solid #959191;
+            	border-radius: 15px;
+            	font-size: 16px;
+            	margin: 10px 0;
+        	}
+
+			
+		</style>
+	</head>
+	<body>
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<article id="contact" style="margin:auto">
+					<h2 class="major">作业互评</h2>
+					<h3 style="text-align: left;">作业标题: {{homework[0]}}</h3>
+					<h3 style="float: left;">互评学号: {{homework[1]}}</h3>
+					<h3 style="float: right;">满分: {{homework[3]}}</h3>
+					<br><br>
+					<h3 style="text-align: left;">提交内容:</h3>
+					<div class="text-box">
+						<p>{{homework[2]}}</p>
+					</div>
+					
+
+					<br><br>
+
+					<form method="post" action="/commitAssess">
+						<div class="fields">
+							<div class="field half">
+								<h3>互评分数</h3>
+								<input type="text" name="score" id="score" placeholder="请输入互评分数(/{{homework[3]}}分)"/>
+							</div>
+						</div>
+						<div class="container">
+							<h3>评语</h3>
+								<textarea class="commit-box" name="assess" rows="4" cols="100" placeholder="请输入评价内容"></textarea>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="提交" class="primary" /></li>
+							<li><a href="/assess"><input type="button" value="取消" /></a></li>
+						</ul>
+						
+					</form>
+				</article>	
+			</div>
+	</body>
+</html>
