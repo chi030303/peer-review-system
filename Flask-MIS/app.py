@@ -30,10 +30,11 @@ def login():
     try:
         cursor.execute(sql_1)
         result = cursor.fetchone()
-        userId = result[0]
         
         if result != None:
             # 登录成功
+            userId = result[0]
+            
             session['user'] = result  # 设置session
             session.permanent = True  # 设置session有效时间
 
@@ -167,6 +168,35 @@ def cancelCommitHomeworks(cno):
     return redirect('/sHomeworks/'+cno+'/'+tname)
 
 
+
+# 学生查看自己作业的评价
+@app.route('/myHomeworkAssess/<hid>/<cno>',methods=['GET','POST'])
+def myHomeworkAssess(hid,cno):
+
+    user = session.get("user")
+    sno = user[0]
+    cursor = db.cursor()
+
+    session['myAssessInform'] = (cno,hid)
+    session.permanent = True
+
+    # 查询学生课程作业
+    sql_1 = "select assess.score,assess.assess,assess.sno,appeal.statue from assess left join appeal on assess.sno = appeal.sno_a and assess.cno = appeal.cno and assess.hid = appeal.hid and assess.sno_a = appeal.sno and assess.sno_a = '%s' and assess.cno = '%s' and assess.hid = %s"
+    param_1 = (sno,cno,hid)
+
+    sql_2 = "select homework.title,homework.score,homeworkcommit.content from homework,homeworkcommit where homework.cno = homeworkcommit.cno and homework.hid = homeworkcommit.hid and homeworkcommit.sno = '%s' and homework.cno = '%s' and homework.hid = %s"
+    param_2 = (sno,cno,hid)
+
+    cursor.execute(sql_1%param_1)
+    assesses = cursor.fetchall()
+
+    cursor.execute(sql_2%param_2)
+    homework = cursor.fetchone()
+
+    return render_template('student-myHomeworkAssess.html',assesses=assesses,homework=homework)
+
+
+
 # 学生查看互评作业列表
 @app.route('/assess',methods=['GET','POST'])
 def selctAssessList():
@@ -221,14 +251,85 @@ def commitAssess():
     cursor = db.cursor()
 
     # 提交作业互评成绩和评价
-    sql = "update assess set score = %s , assess = '%s' where sno = '%s' and hid = %s and cno = '%s' and sno_a = '%s'"
-    param = (score,assess,sno,inform[0],inform[1],inform[2])
+    sql_1 = "update assess set score = %s , assess = '%s' where sno = '%s' and hid = %s and cno = '%s' and sno_a = '%s'"
+    param_1 = (score,assess,sno,inform[0],inform[1],inform[2])
 
-    print(sql%param)
+    cursor.execute(sql_1%param_1)
+    db.commit()
+
+    sql_2 = "select assess.score,assess_num.w from assess,assess_num where assess.sno = assess_num.sno and assess.cno = assess_num.cno and assess.hid = %s and assess.cno = '%s' and assess.sno_a = '%s'"
+    param_2 = (inform[0],inform[1],inform[2])
+
+    sql_3 = "select score from homeworkcommit where sno = '%s' and cno = '%s' and hid = %s"
+    param_3 = (inform[2],inform[1],inform[0])
+    
+    cursor.execute(sql_2%param_2)
+    scores = cursor.fetchall()
+
+    len = 0
+    sum_w = 0
+    # 获取当前所有互评分数和权重总和
+    for score in scores:
+        if score[0] != None:
+            sum_w = sum_w + score[1]
+            len = len + 1
+    
+    # 获取当前分数,如果不为None,则表示老师已经评价过该作业
+    cursor.execute(sql_3%param_3)
+    appeal_score = cursor.fetchone()[0]
+
+    # 按照权重来求作业均分
+    avg_score = 0
+    if len == 3 and appeal_score == None:
+        for score in scores:
+            avg_score = avg_score + score[0] * (score[1]/sum_w)
+
+        sql_4 = "update homeworkcommit set score = %s where hid = %s and cno = '%s' and sno = '%s'"
+        param_4 = (avg_score,inform[0],inform[1],inform[2])
+
+        cursor.execute(sql_4%param_4)
+        db.commit()
+
+    return redirect('/assess')
+
+
+
+# 学生提交互评申诉
+@app.route('/comfirmAppeal/<sno_a>',methods=['GET','POST'])
+def comfirmAppeal(sno_a):
+
+    user = session.get("user")
+    sno = user[0]
+    cursor = db.cursor()
+
+    inform = session.get("myAssessInform")
+
+    # 提交互评申诉
+    sql = "insert into appeal values('%s','%s',%s,'%s','F',NULL)"
+    param = (sno,inform[0],inform[1],sno_a)
+
     cursor.execute(sql%param)
     db.commit()
 
-    return redirect('/assess')
+    return redirect("/myHomeworkAssess/"+inform[1]+"/"+inform[0])
+
+
+# 学生查看申诉列表
+@app.route('/selectAppeal',methods=['GET','POST'])
+def selectAppeal():
+
+    user = session.get("user")
+    sno = user[0]
+    cursor = db.cursor()
+
+    # 查看申诉列表
+    sql = "select course.cname,homework.title,assess.score,homework.score,appeal.statue,appeal.inform from appeal,homework,course,assess where appeal.sno = assess.sno_a and appeal.cno = assess.cno and appeal.hid = assess.hid and appeal.sno_a = assess.sno and appeal.cno = course.cno and appeal.cno = homework.cno and appeal.hid = homework.hid and appeal.sno = '%s'" 
+    param = (sno)
+
+    cursor.execute(sql%param)
+    informs = cursor.fetchall()
+
+    return render_template("student-appeal.html",informs=informs)
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -393,6 +494,109 @@ def checkOneHomework(sno,hid):
     return render_template('teacher-checkOneHomework.html',homework=homework)
 
 
+
+# 教师查看学生互评申诉列表
+@app.route('/checkAppealList',methods=['GET','POST'])
+def checkAppealList():
+
+    user = session.get("user")
+    tno = user[0]
+    cursor = db.cursor()
+
+    sql_1 = "select course.cname,homework.title,appeal.sno,appeal.sno_a,assess.score,homework.score,appeal.statue,assess.cno,assess.hid from teaching,sc,appeal,homework,course,assess where teaching.cno = appeal.cno and teaching.cid = sc.cid and sc.sno = appeal.sno and sc.cno = appeal.cno and appeal.sno = assess.sno_a and assess.cno = appeal.cno and assess.hid = appeal.hid and assess.sno = appeal.sno_a and appeal.cno = homework.cno and appeal.hid = homework.hid and appeal.cno = course.cno and teaching.tno = '%s'"
+    param_1 = (tno)
+
+    cursor.execute(sql_1%param_1)
+    informs = cursor.fetchall()
+
+    return render_template('teacher-appealList.html',informs=informs)
+
+
+
+
+# 教师进行申诉处理
+@app.route('/handleAppeal/<sno>/<sno_a>/<cno>/<hid>',methods=['GET','POST'])
+def handleAppeal(sno,sno_a,cno,hid):
+
+    user = session.get("user")
+    tno = user[0]
+    cursor = db.cursor()
+
+    # 将信息保存在session中
+    session['inform'] = (sno,sno_a,cno,hid)
+    session.permanent = True
+
+    sql_1 = "select s.sno,s.sname,assess_num.w from s,assess_num where s.sno = assess_num.sno and s.sno = '%s' and assess_num.cno = '%s'"
+    param_1 = (sno,cno)
+
+    sql_2 = "select s.sno,s.sname,assess_num.w from s,assess_num where s.sno = assess_num.sno and s.sno = '%s' and assess_num.cno = '%s'"
+    param_2 = (sno_a,cno)
+
+    sql_3 = "select homework.title,homeworkcommit.content,homework.score from homework,homeworkcommit where homework.cno = homeworkcommit.cno and homework.hid = homeworkcommit.hid and homework.cno = '%s' and homework.hid = %s and homeworkcommit.sno = '%s'"
+    param_3 = (cno,hid,sno)
+
+    sql_4 = "select score,assess from assess where sno = '%s' and cno = '%s' and sno_a = '%s' and hid = %s"
+    param_4 = (sno_a,cno,sno,hid)
+
+    cursor.execute(sql_1%param_1)
+    s1 = cursor.fetchone()
+
+    cursor.execute(sql_2%param_2)
+    s2 = cursor.fetchone()
+
+    cursor.execute(sql_3%param_3)
+    homework = cursor.fetchone()
+
+    cursor.execute(sql_4%param_4)
+    assess = cursor.fetchone()
+
+    return render_template('teacher-handleAppeal.html',s1=s1,s2=s2,homework=homework,assess=assess)
+
+
+# 教师修改学生互评权重
+@app.route('/modifyW',methods=['GET','POST'])
+def modifyW():
+
+    sno = str(request.form.get('sno'))
+    w = str(request.form.get('w'))
+
+    inform = session.get("inform")
+
+    cursor = db.cursor()
+
+    sql = "update assess_num set w = %s where sno = '%s'"
+    param = (w,sno)
+    
+    cursor.execute(sql%param)
+    db.commit()
+
+    path = "/handleAppeal/%s/%s/%s/%s"
+
+    return redirect(path%inform)
+
+
+# 教师提交申诉结果的结果
+@app.route('/commitHandle',methods=['GET','POST'])
+def commitHandle():
+
+    score = str(request.form.get('score'))
+    inform = str(request.form.get('inform'))
+
+    informs = session.get("inform")
+
+    cursor = db.cursor()
+
+    sql_1 = "update appeal set statue = 'T',inform = '%s' where sno = '%s' and sno_a = '%s' and cno = '%s' and hid = %s"
+    param_1 = (inform,informs[0],informs[1],informs[2],informs[3])
+    
+    sql_2 = "update homeworkcommit set score = %s where sno = '%s' and cno = '%s' and hid = %s"
+    param_2 = (score,informs[0],informs[2],informs[3])
+
+    cursor.execute(sql_1%param_1)
+    cursor.execute(sql_2%param_2)
+    db.commit()
+
+    return redirect("/checkAppealList")
 
 
 # 重定向到主页面

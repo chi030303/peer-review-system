@@ -1,63 +1,75 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>作业提交记录</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body>
-		<!-- Wrapper -->
-			<div id="wrapper">
-				<article id="contact" style="margin:auto">
-					<h2 class="major">作业提交记录</h2>
-					<h3>作业标题 :</h3>
-					<span style="float: left;"><h3>作业内容 :</h3></span>
-					<span style="float: left;"><p>作业内容</p></span>
-					<form method="post" action="/setHomework">
-						<div class="fields">
-							<div class="field half">
-								
-									<label for="title">作业标题</label>
-									<input type="text" name="title" id="title" placeholder="请输入作业标题"/>
-								
-							</div>
-						</div>
+<head>
+  <style>
+    /* 弹窗样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1;
+    }
 
-						<div class="fields">
-							<div class="field half">
+    .modal-content {
+      background-color: #fff;
+      border-radius: 5px;
+      width: 300px;
+      margin: 100px auto;
+      padding: 20px;
+      text-align: center;
+    }
 
-								<label for="deadline">截至时间</label>
-								<input type="text" name="deadline" id="deadline" placeholder="请输入作业截至时间"/>
+    /* 按钮样式 */
+    .btn {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-							</div>
-						</div>
-						
-						<div class="fields">
-							<div class="field half">
+    .btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
 
-								<label for="score">作业总分(满分)</label>
-								<input type="text" name="score" id="score" placeholder="请输入作业总分"/>
+<body>
+  <button onclick="showModal()">显示确认弹窗</button>
 
-							</div>
-						</div>
-						
-						<div class="fields">
-							<div class="field half">
-								
-									<label for="content">作业内容</label>
-									<textarea id="content" name="content" rows="4" cols="200" placeholder="请输入作业内容"></textarea>
-								
-							</div>
-						</div>
-						<ul class="actions">
-							<li><input type="submit" value="提交" class="primary" /></li>
-							<li><a href="/cancelSetHomeworks"><input type="button" value="取消" /></a></li>
-						</ul>
-						
-					</form>
-				</article>	
-			</div>
-	</body>
+
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <h2>确认操作</h2>
+      <p>你确定要执行这个操作吗？</p>
+      <button class="btn" onclick="confirmAction()">确认</button>
+      <button class="btn" onclick="closeModal()">取消</button>
+    </div>
+  </div>
+
+
+
+  <script>
+    function showModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = 'none';
+    }
+
+    function confirmAction() {
+      alert('操作已确认');
+      closeModal();
+    }
+  </script>
+</body>
 </html>

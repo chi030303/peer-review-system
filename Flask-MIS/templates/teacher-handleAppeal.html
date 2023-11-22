@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>申诉处理</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+		<style>
+			.text-box {
+				border: 2px solid #a4a4a4; /* 边框样式 */
+				border-radius: 10px; /* 圆角边框 */
+				padding: 20px; /* 内边距 */
+				background-color: #636262; /* 背景颜色 */
+				height: 200px;
+				width: 800px; /* 框的宽度 */
+				text-align: left; /* 文本居中 */
+				margin: 0 auto; /* 水平居中 */
+			}
+	
+			.commit-box {
+				width: 100%;
+				padding: 10px;
+				border: 2px solid #959191;
+				border-radius: 15px;
+				font-size: 16px;
+				margin: 10px 0;
+			}
+
+			.container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* 创建3列，每列等宽 */
+            gap: 10px; /* 列之间的间距 */
+            }
+
+            .item {
+                border: 2px solid #7a7979;
+                padding: 10px;
+                text-align: center;
+            }
+
+            a {
+                color: #ffffff; /* 设置默认链接颜色 */
+                text-decoration: none; /* 去掉下划线 */
+            }
+
+            /* 悬停时的链接样式 */
+            a:hover {
+                color: rgb(120, 120, 120); /* 设置悬停时链接颜色为蓝色 */
+            }
+			
+			 /* 弹窗样式 */
+			.modal {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.7);
+				z-index: 1;
+			}
+
+			.modal-content {
+				background-color: #686868;
+				border-radius: 20px;
+				width: 900px;
+				height: 500px;
+				margin: 100px auto;
+				padding: 20px;
+				text-align: center;
+				border: 4px solid #464646;
+			}
+
+
+
+			/* 按钮样式 */
+			.btn {
+				padding: 10px 20px;
+				background-color: #686868;
+				color: rgb(255, 255, 255);
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				line-height: 50%;
+			}
+
+			.btn:hover {
+				background-color: rgb(75, 75, 75);
+			}	
+
+		</style>
+	</head>
+	
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+                <article id="intro">
+                    <span style="float: left;"><h2 class="major">申诉处理</h2></span>
+                    <span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
+                    <br><br>
+                    
+                    <span class="image main"><img src="/images/pic01.jpg" alt="" /></span>
+
+                    <div style="font-size: 18px;position: absolute;left: 450px;top: 500px;">学号</div>
+					<div style="font-size: 18px;position: absolute;left: 650px;top: 500px;">姓名</div>
+					<div style="font-size: 18px;position: absolute;left: 850px;top: 500px;">互评权重</div>
+					<br><br>
+					
+					<div style="font-size: 20px;float: left;">申诉学生</div>
+					<div style="font-size: 18px;position: absolute;left: 450px;top: 555px;">{{s1[0]}}</div>
+					<div style="font-size: 18px;position: absolute;left: 650px;top: 555px;">{{s1[1]}}</div>
+					<div style="font-size: 18px;position: absolute;left: 850px;top: 555px;">{{s1[2]}}</div>
+					<a style="float: right;"><button type="button" style="height: 40px;" onclick="showModifyW('myModal-2','{{s1[0]}}','{{s1[1]}}')">调整互评权重</button></a>
+					<br><br>
+					<div style="font-size: 20px;float: left;">互评学生</div>
+					<div style="font-size: 18px;position: absolute;left: 450px;top: 607px;">{{s2[0]}}</div>
+					<div style="font-size: 18px;position: absolute;left: 650px;top: 607px;">{{s2[1]}}</div>
+					<div style="font-size: 18px;position: absolute;left: 850px;top: 607px;">{{s2[2]}}</div>
+					<a style="float: right;"><button type="button" style="height: 40px;" onclick="showModifyW('myModal-2','{{s2[0]}}','{{s2[1]}}')">调整互评权重</button></a>
+					<br><br><br><br>
+                    
+					<h3 style="font-size: 20px;float: left;">作业标题:&nbsp;&nbsp;</h3>
+					<h3 style="font-size: 20px;">{{homework[0]}}</h3>
+					
+					<h3 style="font-size: 20px;text-align: left;">提交内容:</h3>
+					<div class="text-box">
+						<p>{{homework[1]}}</p>
+					</div>
+					<br><br>
+					
+					<h3 style="font-size: 20px;float: left;">互评分数:&nbsp;&nbsp;{{assess[0]}}</h3>
+					<br><br>
+
+					<h3 style="font-size: 20px;text-align: left;">互评评语:&nbsp;&nbsp;</h3>
+					<div class="text-box">
+						<p>{{assess[1]}}</p>
+					</div>
+					<br><br>
+
+					<a style="position: absolute;left: 40%;"><button type="button" onclick="showModal('myModal')" style="font-size: 16px;height: 50px;width: 100px;">处理</button></a>
+					<a href="/" style="position: absolute;left: 55%;"><button type="button" style="background-color: #636262; font-size: 16px;height: 50px;width: 100px;">取消</button></a>
+					
+
+					<div id="myModal" class="modal">
+						<div class="modal-content">
+							<h2 style="font-size: 26px;">处理互评申诉</h2>
+							<br>
+							<form method="POST" action="/commitHandle" style="text-align: center;">
+								<label for="score" style="font-size: 16px;">作业分数(最终分数)</label>
+								<input style="width: 200px; height: 50px;margin: 0 auto;" type="text" name="score" id="score" placeholder="满分{{assess[0]}}分"/>
+								<br>
+								<label for="inform" style="font-size: 16px;">附加信息</label>
+								<textarea style="width: 600px; height: 150px;margin: 0 auto;" id="inform" name="inform" rows="2" cols="50" placeholder="请输入要向申诉人提交的附加信息"></textarea>
+								<br>
+								<input type="submit" value="确定"  class="btn"/>
+								&emsp;&emsp;&emsp;&emsp;
+								<button type="button" class="btn" onclick="closeModal('myModal')">取消</button>
+							</form>
+						</div>
+					</div>
+
+					<div id="myModal-2" class="modal">
+						<div class="modal-content" style="height: 320px; width: 600px;">
+							<h2 style="font-size: 26px;">学生互评权重调整</h2>
+							<form method="post" action="/modifyW" style="text-align: center;">
+								<input type="hidden" name="sno" id="sno-hidden"/>
+								<div style="position: absolute;left: 40%;" id="sno"></div>
+								<div style="position: absolute;left: 55%;" id="name"></div>
+								<br><br>
+								<label for="score" style="font-size: 17px;">互评权重</label>
+								<input style="width: 200px; height: 50px;margin: 0 auto;" type="text" name="w" id="w" placeholder="请输入互评权重(1~10)"/>
+								<br>
+								<input type="submit" value="确定" class="btn"/>
+								&emsp;&emsp;&emsp;&emsp;
+								<button type="button" class="btn" onclick="closeModal('myModal-2')">取消</button>
+							</form>
+							
+						</div>
+					</div>
+		
+
+                </article>
+				<br><br>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="/https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+			<script>
+				function showModal(str) {
+				  var modal = document.getElementById(str);
+				  modal.style.display = 'block';
+				}
+			
+				function closeModal(str) {
+				  var modal = document.getElementById(str);
+				  modal.style.display = 'none';
+				}
+			
+				function confirmAction(sno_a) {
+					alert('申诉操作已提交');
+					closeModal();
+				    document.location.href="/comfirmAppeal/"+sno_a;
+				}
+			</script>
+			<script>
+				function showModifyW(str,sno,name){
+					var modal = document.getElementById(str);
+					document.getElementById("sno").innerHTML = "学号:  "+sno;
+					document.getElementById("name").innerHTML = "姓名:  "+name;
+					document.getElementById("sno-hidden").value = sno;
+					modal.style.display = 'block';
+				}
+			</script>
+
+	</body>
+</html>

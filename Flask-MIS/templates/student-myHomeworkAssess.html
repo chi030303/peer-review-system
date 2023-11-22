@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>互评详情</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+		<style>
+			.text-box {
+				border: 2px solid #a4a4a4; /* 边框样式 */
+				border-radius: 10px; /* 圆角边框 */
+				padding: 20px; /* 内边距 */
+				background-color: #636262; /* 背景颜色 */
+				height: 200px;
+				width: 800px; /* 框的宽度 */
+				text-align: left; /* 文本居中 */
+				margin: 0 auto; /* 水平居中 */
+			}
+	
+			.commit-box {
+				width: 100%;
+				padding: 10px;
+				border: 2px solid #959191;
+				border-radius: 15px;
+				font-size: 16px;
+				margin: 10px 0;
+			}
+
+			.container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* 创建3列，每列等宽 */
+            gap: 10px; /* 列之间的间距 */
+            }
+
+            .item {
+                border: 1px solid #7a7979;
+                padding: 10px;
+                text-align: center;
+            }
+
+            a {
+                color: #ffffff; /* 设置默认链接颜色 */
+                text-decoration: none; /* 去掉下划线 */
+            }
+
+            /* 悬停时的链接样式 */
+            a:hover {
+                color: rgb(120, 120, 120); /* 设置悬停时链接颜色为蓝色 */
+            }
+			
+			 /* 弹窗样式 */
+			.modal {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.7);
+				z-index: 1;
+			}
+
+			.modal-content {
+				background-color: #686868;
+				border-radius: 20px;
+				width: 400px;
+				height: 200px;
+				margin: 100px auto;
+				padding: 20px;
+				text-align: center;
+				border: 4px solid #464646;
+			}
+
+			/* 按钮样式 */
+			.btn {
+				padding: 10px 20px;
+				background-color: #686868;
+				color: rgb(255, 255, 255);
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				line-height: 50%;
+			}
+
+			.btn:hover {
+				background-color: rgb(75, 75, 75);
+			}	
+		</style>
+	</head>
+	
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+                <article id="intro">
+                    <span style="float: left;"><h2 class="major">作业评价</h2></span>
+                    <span style="float: right;"><a href="/redirect"><img src="/images/back.png" height="35" width="35"></a></span>
+                    <br><br>
+                    
+                    <span class="image main"><img src="/images/pic01.jpg" alt="" /></span>
+
+                    <h3 style="float: left;">作业标题: {{homework[0]}}</h3>
+                    <h3 style="float: right;">满分: {{homework[1]}}</h3>
+					<br><br>
+                    <h3 style="text-align: left;">提交内容:</h3>
+					<div class="text-box">
+						<p>{{homework[2]}}</p>
+					</div>
+					<br>
+
+                    <h3 style="text-align: left;" class="major">评价列表</h3>  
+
+					<div class="container">
+                        {% for assess in assesses %}
+							{% if assess[0] != none %}
+                            <div class="item">
+								<p style="float: left;">评分 :</p>
+								{% if assess[3] == none %}
+								<a style="float: right;"><button type="button" onclick="showModal()" style="height: 40px;">提出互评申诉</button></a>
+								{% else %}
+								<h3 type="button" style="float: right;height: 40px;">已提出申诉</h3>
+								{% endif %}
+								<h3 style="text-align: left;">&nbsp;&nbsp;&nbsp;{{assess[0]}}</h3>
+								<br>
+								<p style="float: left;">评语 :</p>
+								<div class="text-box">
+									<p>{{assess[1]}}</p>
+								</div>
+							</div>
+							<div id="myModal" class="modal">
+								<div class="modal-content">
+								  <h2>申诉操作</h2>
+								  <p>是否要对该互评结果申请重新审查?</p>
+								  <button class="btn" onclick="confirmAction('{{assess[2]}}')">确认</button>
+								  &emsp;&emsp;&emsp;&emsp;
+								  <button class="btn" onclick="closeModal()">取消</button>
+								</div>
+							</div>
+							{% else %}
+							<div class="item">
+								<p>暂无互评信息</p>
+							</div>
+							{% endif %}
+							<br>
+                        {% endfor %}
+                    </div>
+
+					
+
+                </article>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 管理员邮箱: <a href="https://html5up.net">3111962176@qq.com</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+			<script>
+				function showModal() {
+				  var modal = document.getElementById('myModal');
+				  modal.style.display = 'block';
+				}
+			
+				function closeModal() {
+				  var modal = document.getElementById('myModal');
+				  modal.style.display = 'none';
+				}
+			
+				function confirmAction(sno_a) {
+					alert('申诉操作已提交');
+					closeModal();
+				    document.location.href="/comfirmAppeal/"+sno_a;
+				}
+			  </script>
+
+	</body>
+</html>
