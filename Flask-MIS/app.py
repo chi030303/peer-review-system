@@ -181,7 +181,7 @@ def myHomeworkAssess(hid,cno):
     session.permanent = True
 
     # 查询学生课程作业
-    sql_1 = "select assess.score,assess.assess,assess.sno,appeal.statue from assess left join appeal on assess.sno = appeal.sno_a and assess.cno = appeal.cno and assess.hid = appeal.hid and assess.sno_a = appeal.sno and assess.sno_a = '%s' and assess.cno = '%s' and assess.hid = %s"
+    sql_1 = "select assess.score,assess.assess,assess.sno,appeal.statue from assess left join appeal on assess.sno = appeal.sno_a and assess.cno = appeal.cno and assess.hid = appeal.hid and assess.sno_a = appeal.sno where assess.sno_a = '%s' and assess.cno = '%s' and assess.hid = %s"
     param_1 = (sno,cno,hid)
 
     sql_2 = "select homework.title,homework.score,homeworkcommit.content from homework,homeworkcommit where homework.cno = homeworkcommit.cno and homework.hid = homeworkcommit.hid and homeworkcommit.sno = '%s' and homework.cno = '%s' and homework.hid = %s"
@@ -408,36 +408,32 @@ def setHomework():
     sql_1 = "insert into homework values(NULL,'%s','%s','%s','%s',%s)"
     param_1 = (cno,title,content,deadline,score)
 
-    sql_2 = "select hid from homework where cno = '%s' and title = '%s'"
-    param_2 = (cno,title)
+    sql_2 = "select LAST_INSERT_ID()"
 
     sql_3 = "select distinct(sno) from sc where cno = '%s'"
     param_3 = (cno)
 
 
-    try:
-        cursor.execute(sql_1%param_1)
-        db.commit()
+    cursor.execute(sql_1%param_1)
+    db.commit()
 
-        cursor.execute(sql_2%param_2)
-        hid = cursor.fetchone()[0]
+    cursor.execute(sql_2)
+    hid = cursor.fetchone()[0]
         
-        cursor.execute(sql_3%param_3)
-        snos = cursor.fetchall()
+    cursor.execute(sql_3%param_3)
+    snos = cursor.fetchall()
 
-        print(hid,snos)
+    print(hid,snos)
 
-        for sno in snos:
-            sql = "insert into homeworkcommit (sno,cno,hid) values('%s','%s',%s)"
-            print(sql)
-            param = (sno[0],cno,hid)
-            cursor.execute(sql%param)
-            db.commit()
+    for sno in snos:
+        sql = "insert into homeworkcommit (sno,cno,hid) values('%s','%s',%s)"
+        print(sql)
+        param = (sno[0],cno,hid)
+        cursor.execute(sql%param)
+        db.commit()
             
-        return redirect("/tHomework/"+cno)
+    return redirect("/tHomework/"+cno)
 
-    except:
-        print('Error')
 
 
 

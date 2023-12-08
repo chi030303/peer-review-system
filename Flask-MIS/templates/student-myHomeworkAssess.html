@@ -92,6 +92,7 @@
 	
 	<body class="is-preload">
 
+
 		<!-- Wrapper -->
 			<div id="wrapper">
                 <article id="intro">
@@ -118,7 +119,7 @@
                             <div class="item">
 								<p style="float: left;">评分 :</p>
 								{% if assess[3] == none %}
-								<a style="float: right;"><button type="button" onclick="showModal()" style="height: 40px;">提出互评申诉</button></a>
+								<a style="float: right;"><button type="button" onclick="showModal('{{assess[2]}}')" style="height: 40px;">提出互评申诉</button></a>
 								{% else %}
 								<h3 type="button" style="float: right;height: 40px;">已提出申诉</h3>
 								{% endif %}
@@ -131,11 +132,11 @@
 							</div>
 							<div id="myModal" class="modal">
 								<div class="modal-content">
-								  <h2>申诉操作</h2>
-								  <p>是否要对该互评结果申请重新审查?</p>
-								  <button class="btn" onclick="confirmAction('{{assess[2]}}')">确认</button>
-								  &emsp;&emsp;&emsp;&emsp;
-								  <button class="btn" onclick="closeModal()">取消</button>
+									<h2>申诉操作</h2>
+									<p>是否要对该互评结果申请重新审查?</p>
+									<button id="confirm" class="btn" onclick="confirmAction()">确认</button>
+								  	&emsp;&emsp;&emsp;&emsp;
+									<button class="btn" onclick="closeModal()">取消</button>
 								</div>
 							</div>
 							{% else %}
@@ -166,21 +167,23 @@
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
+			<script> var Sno = "" </script>
 			<script>
-				function showModal() {
-				  var modal = document.getElementById('myModal');
-				  modal.style.display = 'block';
+				function showModal(sno) {
+					Sno = sno;
+					var modal = document.getElementById('myModal');
+					modal.style.display = 'block';
 				}
 			
 				function closeModal() {
-				  var modal = document.getElementById('myModal');
-				  modal.style.display = 'none';
+					var modal = document.getElementById('myModal');
+					modal.style.display = 'none';
 				}
 			
-				function confirmAction(sno_a) {
+				function confirmAction() {
 					alert('申诉操作已提交');
 					closeModal();
-				    document.location.href="/comfirmAppeal/"+sno_a;
+				    document.location.href="/comfirmAppeal/"+Sno;
 				}
 			  </script>
 
